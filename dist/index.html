@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Andrew Natoli | Recent Code Samples</title>
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.min.css"/>
+  <link rel="stylesheet" type="text/css" href="./assets/css/prism.min.css"/>
+</head>
+
+<body>
+  <div id="header-bg"></div>
+  <div class="container-fluid">
+    <div id="nav-container" class="navbar-right col-xs-12 col-md-3 col-md-push-8 hidden-xs hidden-sm">
+      <div class="row">
+  <div class="col-md-4">
+    <img src="./assets/img/andrew.jpg" alt="Andrew Natoli" id="me" class="img-responsive img-circle"/>
+  </div>
+  <div class="col-md-8">
+    <h3>
+      Andrew Natoli <br/>
+      <small>
+        <i class="fa fa-github-alt"></i>
+        <a href="https://github.com/AndrewNatoli" rel="noreferrer nofollow" target="_blank">
+           GitHub
+        </a>
+        |
+        <i class="fa fa-linkedin"></i>
+        <a href="https://linkedin.com/in/andrewnatoli" rel="noreferrer nofollow" target="_blank">
+          LinkedIn
+        </a>
+      </small>
+    </h3>
+  </div>
+</div>
+<div id="bio" class="row">
+  <div class="col-xs-12">
+    <p>
+      Hi there! I'm Andrew Natoli, a software developer in Charlotte, North Carolina.
+    </p>
+    <p>
+      I believe in using technology to solve problems, grow businesses, and empower individuals. I have been a technical advisor and lead developer at medical and fundraising startups, as well as a developer for various small businesses with needs from simple websites to content management systems with custom eCommerce platforms.
+    </p>
+    <p>
+      I'm also working to build a better community by mentoring developers and building software to support the CMPD Explorers Christmas Project through Code for Charlotte .
+    </p>
+
+  </div>
+</div>
+<div class="row" id="nav-footer">
+  <div class="col-xs-12">
+    <hr>
+
+    <p>
+      Enjoy scrolling through some of my recent code samples! For more sample action,
+      you can visit my
+      <a href="https://AndrewNatoli.com" target="_blank" rel="noreferrer nofollow">
+        full website
+      </a>
+      or check out this site's source and build tools on
+      <a href="https://github.com/AndrewNatoli/an-sample-site" rel="noreferrer nofollow" target="_blank">
+        GitHub!
+      </a>
+    </p>
+  </div>
+</div>
+
+    </div>
+    <div id="posts-container" class="col-xs-12 col-md-7 col-md-push-1">
+      <div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      Charlotte Road Closures (VueJS Edition)
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-charlotte"></div>
+
+  <div class="panel-body">
+    I originally created a <a href="https://github.com/AndrewNatoli/clt-road-closures" target="_blank" rel="noreferrer nofollow">
+      road closures project
+    </a> to demonstrate using Charlotte's
+    <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiSuvacuLbSAhXHr1QKHexJAvIQFggcMAA&url=http%3A%2F%2Fclt-charlotte.opendata.arcgis.com%2F&usg=AFQjCNE2KtDlgZh_g7HT690qRFGJA8ceLA&sig2=zu_NY9pRWSJKidklEMJyDg"
+       target="_blank" rel="noreferrer nofollow">
+      open data portal
+    </a>
+    during a guest presentation I gave at Tech Talent South in 2016. I recently decided to do a VueJS
+    implementation to experiment with "Vueify" which lets you break out your Vue components into
+    individual files.
+
+    <pre>
+<code class="language-markup">&lt;template&gt;
+  &lt;div&gt;
+    &lt;button class="btn btn-primary btn-toggle" v-on:click="toggleShowExpired"&gt;
+      {{showExpiredLabel}}
+    &lt;/button&gt;
+    &lt;closure-card v-for="record in filteredRecords" :record="record"&gt;&lt;/closure-card&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  import ClosureCard from '../components/ClosureCard.vue';
+
+  export default {
+    name: 'closure-feed',
+    components: { ClosureCard },
+    data: function () {
+      return {
+        records: [],
+        showExpired: false
+      }
+    },
+    mounted: function () {
+      this.fetchFeed();
+    },
+    methods: {
+      toggleShowExpired: function () {
+        this.showExpired = !this.showExpired;
+      },
+      fetchFeed: function () {
+        var self = this;
+        Vue.http.get('./data/example.json')
+          .then(function (resp) {
+            self.$set(self, 'records', resp.body.features);
+          },
+          function (resp) {
+            console.log("Error here :(");
+          }
+        );
+      }
+    },
+    computed: {
+      filteredRecords: function () {
+        var now = Date.now();
+        var self = this;
+        return this.records.filter(function (record) {
+          if (!self.showExpired)
+          {
+            var end = new Date(record.properties.ENDDATE).getTime()
+            return (now &lt; end);
+          }
+          return true;
+        })
+      },
+      showExpiredLabel: function () {
+        return (this.showExpired) ? "Hide Expired Closures" : "Show Expired Closures";
+      }
+    }
+  }
+&lt;/script&gt;</code>
+    </pre>
+    <p>
+      This code is from the <b>ClosureFeed</b> Vue component. Its purpose is to fetch the data feed when loaded and render
+      the individual records with the ClosureCard component. It also controls filtering records where the "end date" has
+      already been passed.
+    </p>
+    <p>
+      You can view the full project source on
+      <a href="https://github.com/AndrewNatoli/clt-road-closures-vue" rel="noreferrer nofollow" target="_blank">
+        GitHub.
+      </a>
+    </p>
+  </div>
+</div>
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      GET /user/{user_id}/visits - Sample API
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-lumen"></div>
+
+  <div class="panel-body">
+    Recently I built a sample REST API using the Lumen micro framework by Laravel. The API was required
+    to allow users to track cities they have visited from a provided list, as well as display the cities
+    each user has visited. This snippet comes from the UsersController.
+    <pre>
+<code class="language-php">/**
+ * GET /user/{user_id}/visits
+ *
+ * Returns a list of cities the user has visited.
+ * The state name gets appended because I imagine it will be
+ * commonly requested data. Better to do the join now than run
+ * another SELECT later.
+ *
+ * Funfact: Mutators don't run on related models in laravel
+ * thus we can't simply do $Users->cities()->paginate().
+ *
+ * @param $user_id
+ * @return Response
+ */
+ public function listVisitedCitiesAction ($user_id):Response
+ {
+
+  $user = User::find($user_id);
+
+  if (!$user)
+  {
+    return $this->jsonResponse(false, "User not found.", 404);
+  }
+
+  $cities = \DB::table('users')
+    ->join('user_city', 'user_id', '=', 'id')
+    ->join('cities', 'cities.id' ,'=', 'user_city.city_id')
+    ->join('states', 'cities.state_id', '=', 'states.id')
+    ->where('users.id', '=', $user->id)
+    ->select(
+    \DB::raw("
+      cities.id,
+      cities.name AS name,
+      cities.state_id,
+      states.name AS state_name,
+      " . City::LAT_LONG_SQL)
+    )
+    ->paginate(50);
+
+  if (count($cities))
+  {
+    return $this->jsonResponse(true, "Cities visited", 200, $cities, true);
+  }
+  else
+  {
+    return $this->jsonResponse(false, "No visits recorded.", 200);
+  }
+
+}</code>
+    </pre>
+    <p>
+      The desired output from this endpoint required a custom written query as opposed to simply utilizing Laravel's
+      object relationship mapping utility. <code class="language-php">City::LAT_LONG_SQL</code> is a
+      <code class="language-sql">SELECT</code> statement tied to the City model used to convert the cities tables'
+      "location" field (which is stored as a <code class="language-sql">POINT</code>) into separate latitude and
+      longitude fields.
+    </p>
+    <p>
+      <code class="language-php">$this->jsonResponse()</code> is a custom method inherited by all controller classes
+      that I wrote to standardize the API's output format across endpoints.
+    </p>
+  </div>
+</div>
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      GET /user/{user_id}/visits - Sample API
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-cmpd"></div>
+
+  <div class="panel-body">
+    <p>
+      Every year the CMPD Explorers Christmas Project collects and delivers toys and clothing to underprivileged
+      children throughout Charlotte. Since the project began four decades ago all nominations, deliveries,
+      and inventories were managed entirely by paper. In October 2015 I joined Code for Charlotte and led
+      development with a team of fellow volunteers to build a digital implementation of their record
+      keeping process that helped CMPD serve over 1,700 children in 2016.
+    </p>
+    <p>
+      We're currently in the process of converting the project from Laravel to Phalcon to better tackle
+      some new features for the 2017 version so here's an in-progress look at some considerations to the
+      core template:
+    </p>
+    <p>
+      <b>layouts/dashboard.volt</b>
+    </p>
+    <pre>
+<code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;title&gt;CMPD Explorers&lt;/title&gt;
+    &lt;meta content=&quot;width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no&quot; name=&quot;viewport&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/css/styles.min.css&quot;&gt;
+  &lt;/head&gt;
+  &lt;body class=&quot;hold-transition skin-blue layout-top-nav&quot;&gt;
+    &lt;div class=&quot;wrapper&quot;&gt;
+      {% include 'partials/header.volt' %}
+      &lt;div class=&quot;content-wrapper&quot;&gt;
+        &lt;div class=&quot;container&quot;&gt;
+          {% block content %}
+        &lt;/div&gt;
+      &lt;/div&gt;
+      {% include 'partials/footer.volt' %}
+    &lt;/div&gt;
+    &lt;script src=&quot;/js/scripts.js&quot;&gt;&lt;/script&gt;
+    {% block footer_scripts %}{% endblock %}
+  &lt;/body&gt;
+&lt;/html&gt;</code>
+    </pre>
+    <p>
+      "Volt" is Phalcon's templating engine. Similar to Blade in Laravel, it allows us to introduce inheritance to
+      templates through the use of "blocks." Here we started with a "content" block where action-specific views
+      will be displayed, and there's also a "footer_scripts" block for placing any action-specific javascript, extra
+      styles, etc.
+    </p>
+    <p>
+      We import a single stylesheet that's assembled using Grunt and LESS, and a single script file that contains
+      all necesarry Javascript.
+    </p>
+    <p>
+      The header and footer HTML is split into separate partials to keep everything sectioned and neat.
+    </p>
+
+    <p>
+      <b>
+        Excerpt from partials/header.volt
+      </b>
+    </p>
+    <pre>
+<code class="language-markup">&lt;div class=&quot;collapse navbar-collapse pull-left&quot; id=&quot;navbar-collapse&quot;&gt;
+  &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+    {{ navigation.renderNavigationItems() }}
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+    <p>
+      In Laravel we used Middleware to pragmatically generate a navigation menu for administrators.
+      That's done outside of the template engine but it makes it easy to highlight the active page and
+      filter options for different permission levels.
+    </p>
+    <p>
+      We're creating something similar here with Phalcon's "Plugins" format.
+    </p>
+    <p>
+      <code class="language-markup">{{ navigation.renderNavigationItems() }}</code> is our plugin that
+      produces HTML showing available actions and highlighting the active one.
+    </p>
+    <p>
+      You can view the full project on GitHub:
+      <a href="https://github.com/CodeForCharlotte/cmpd-winter-gift" target="_blank" rel="noreferrer nofollow">2017 Version (Phalcon)</a>
+      |
+      <a href="https://github.com/CodeForCharlotte/cmpd-holiday-gift-backend" target="_blank" rel="noreferrer nofollow">2016 Version (Laravel)</a>
+    </p>
+  </div>
+</div>
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h2 class="panel-title">
+      Design Decisions: VueJS at Qtera
+    </h2>
+  </div>
+
+  <div class="panel-header-img panel-img-qtera"></div>
+
+
+  <div class="panel-body">
+    While at Qtera I introduced VueJS to our stack to make our user-facing site friendlier and build
+    more flexible tools to make our data entry team's lives easier. I can't show off the code I wrote
+    but I would like to share another way to make components with Vue.
+    <pre>
+<code class="language-markup">&lt;script type=&quot;text/x-template&quot; id=&quot;modal-example&quot;&gt;
+  &lt;modal :show.sync=&quot;visible&quot; effect=&quot;fade&quot; class=&quot;example-modal&quot;&gt;
+
+    &lt;!-- Modal header --&gt;
+    &lt;div slot=&quot;modal-header&quot; class=&quot;example-modal-header&quot;&gt;
+      &lt;h4 class=&quot;example-modal-title&quot;&gt;
+        Modal Header
+      &lt;/h4&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Modal body --&gt;
+    &lt;div slot=&quot;modal-body&quot; class=&quot;example-modal-body&quot;&gt;
+      ...
+    &lt;/div&gt;
+
+    &lt;div slot=&quot;modal-footer&quot; class=&quot;campaign-modal-footer&quot;&gt;
+      ...
+    &lt;/div&gt;
+
+  &lt;/modal&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+  Vue.component('modal-example', {
+    template: &quot;#modal-example&quot;,
+    components: {
+      modal: VueStrap.modal
+    },
+    data: function () {
+      return {
+        visible: false
+      }
+    },
+    methods: {
+      ...
+    },
+  });
+&lt;/script&gt;</code></pre>
+    <p>
+      This may not look as neat as the components written in the Charlotte Road Closures project
+      but it's an extremely useful approach when you need to retrofit an existing application.
+    </p>
+    <p>
+      Seeing this format front and center in Vue's documentation was a big reason for picking Vue over
+      Angular or React. Our existing frontend was rendered entirely on the server using a template
+      engine, so being able to build vue components this way kept us from having to lose time
+      introducing build tools and cluttering up our codebase with stray javascript files.
+      We would simply group these components as additional template files for the controller
+      and be able to include them when needed.
+    </p>
+  </div>
+</div>
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      DesktopSolutions.com
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-desktop"></div>
+
+  <div class="panel-body">
+    <p>
+      One of the many websites I worked on while at Desktop Solutions was
+      <a href="https://github.com/CodeForCharlotte/cmpd-winter-gift" target="_blank" rel="noreferrer nofollow">
+        our own!
+      </a>
+      Our site is powered with WordPress and while we <em>did</em> start with a base template,
+      I worked with our designer to overhaul its look and lay out our content.
+    </p>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./assets/scripts.js"></script>
+</body>
+
+</html>
