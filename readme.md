@@ -15,6 +15,12 @@ node express.js
 
 Once express.js is running, head to localhost:8080.
 
+**Note** my build environment looks like this:
+
+* grunt-cli 0.1.13
+* node 6.10.0
+* npm 3.10.10
+
 ## Use it / Learn from it!
 Licensed under the Creative Commons Attribution NonCommercial (CC-BY-NC) license.
 Use this to learn from or base your own personal website with it. 
