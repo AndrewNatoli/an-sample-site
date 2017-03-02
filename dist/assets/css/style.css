@@ -8905,9 +8905,10 @@ h3 {
 }
 .panel-card {
   border-radius: 0;
-  -moz-box-shadow: 2px 2px 2px #ccc;
-  -webkit-box-shadow: 2px 2px 2px #ccc;
-  box-shadow: 2px 2px 2px #ccc;
+  border: 0;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .panel-card .panel-heading .panel-title {
   font-size: 20px;
