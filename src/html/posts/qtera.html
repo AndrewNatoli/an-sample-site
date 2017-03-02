@@ -1,0 +1,67 @@
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h2 class="panel-title">
+      Design Decisions: VueJS at Qtera
+    </h2>
+  </div>
+
+  <div class="panel-header-img panel-img-qtera"></div>
+
+
+  <div class="panel-body">
+    While at Qtera I introduced VueJS to our stack to make our user-facing site friendlier and build
+    more flexible tools to make our data entry team's lives easier. I can't show off the code I wrote
+    but I would like to share another way to make components with Vue.
+    <pre>
+<code class="language-markup">&lt;script type=&quot;text/x-template&quot; id=&quot;modal-example&quot;&gt;
+  &lt;modal :show.sync=&quot;visible&quot; effect=&quot;fade&quot; class=&quot;example-modal&quot;&gt;
+
+    &lt;!-- Modal header --&gt;
+    &lt;div slot=&quot;modal-header&quot; class=&quot;example-modal-header&quot;&gt;
+      &lt;h4 class=&quot;example-modal-title&quot;&gt;
+        Modal Header
+      &lt;/h4&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Modal body --&gt;
+    &lt;div slot=&quot;modal-body&quot; class=&quot;example-modal-body&quot;&gt;
+      ...
+    &lt;/div&gt;
+
+    &lt;div slot=&quot;modal-footer&quot; class=&quot;campaign-modal-footer&quot;&gt;
+      ...
+    &lt;/div&gt;
+
+  &lt;/modal&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+  Vue.component('modal-example', {
+    template: &quot;#modal-example&quot;,
+    components: {
+      modal: VueStrap.modal
+    },
+    data: function () {
+      return {
+        visible: false
+      }
+    },
+    methods: {
+      ...
+    },
+  });
+&lt;/script&gt;</code></pre>
+    <p>
+      This may not look as neat as the components written in the Charlotte Road Closures project
+      but it's an extremely useful approach when you need to retrofit an existing application.
+    </p>
+    <p>
+      Seeing this format front and center in Vue's documentation was a big reason for picking Vue over
+      Angular or React. Our existing frontend was rendered entirely on the server using a template
+      engine, so being able to build vue components this way kept us from having to lose time
+      introducing build tools and cluttering up our codebase with stray javascript files.
+      We would simply group these components as additional template files for the controller
+      and be able to include them when needed.
+    </p>
+  </div>
+</div>

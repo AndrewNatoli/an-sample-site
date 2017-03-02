@@ -1,0 +1,77 @@
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      GET /user/{user_id}/visits - Sample API
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-lumen"></div>
+
+  <div class="panel-body">
+    Recently I built a sample REST API using the Lumen micro framework by Laravel. The API was required
+    to allow users to track cities they have visited from a provided list, as well as display the cities
+    each user has visited. This snippet comes from the UsersController.
+    <pre>
+<code class="language-php">/**
+ * GET /user/{user_id}/visits
+ *
+ * Returns a list of cities the user has visited.
+ * The state name gets appended because I imagine it will be
+ * commonly requested data. Better to do the join now than run
+ * another SELECT later.
+ *
+ * Funfact: Mutators don't run on related models in laravel
+ * thus we can't simply do $Users->cities()->paginate().
+ *
+ * @param $user_id
+ * @return Response
+ */
+ public function listVisitedCitiesAction ($user_id):Response
+ {
+
+  $user = User::find($user_id);
+
+  if (!$user)
+  {
+    return $this->jsonResponse(false, "User not found.", 404);
+  }
+
+  $cities = \DB::table('users')
+    ->join('user_city', 'user_id', '=', 'id')
+    ->join('cities', 'cities.id' ,'=', 'user_city.city_id')
+    ->join('states', 'cities.state_id', '=', 'states.id')
+    ->where('users.id', '=', $user->id)
+    ->select(
+    \DB::raw("
+      cities.id,
+      cities.name AS name,
+      cities.state_id,
+      states.name AS state_name,
+      " . City::LAT_LONG_SQL)
+    )
+    ->paginate(50);
+
+  if (count($cities))
+  {
+    return $this->jsonResponse(true, "Cities visited", 200, $cities, true);
+  }
+  else
+  {
+    return $this->jsonResponse(false, "No visits recorded.", 200);
+  }
+
+}</code>
+    </pre>
+    <p>
+      The desired output from this endpoint required a custom written query as opposed to simply utilizing Laravel's
+      object relationship mapping utility. <code class="language-php">City::LAT_LONG_SQL</code> is a
+      <code class="language-sql">SELECT</code> statement tied to the City model used to convert the cities tables'
+      "location" field (which is stored as a <code class="language-sql">POINT</code>) into separate latitude and
+      longitude fields.
+    </p>
+    <p>
+      <code class="language-php">$this->jsonResponse()</code> is a custom method inherited by all controller classes
+      that I wrote to standardize the API's output format across endpoints.
+    </p>
+  </div>
+</div>

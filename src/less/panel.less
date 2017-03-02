@@ -1,0 +1,61 @@
+.panel-card {
+  border-radius: 0;
+  .box-shadow(2px 2px 2px #ccc);
+  .panel-heading {
+    .panel-title {
+      font-size:20px;
+    }
+  }
+
+  .panel-header-img {
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 275px;
+    background-position: center;
+  }
+
+  .panel-img-charlotte {
+    background-image: url('/assets/img/charlotte.jpg');
+  }
+
+  .panel-img-cmpd {
+    background-image: url('/assets/img/cmpd-explorers.png');
+  }
+
+  .panel-img-lumen {
+    background-image: url('/assets/img/lumen-logo.png');
+  }
+
+  .panel-img-qtera {
+    background-image: url('/assets/img/qtera.png');
+  }
+
+  .panel-img-desktop {
+    background-image: url('/assets/img/desktop.jpg');
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-header-img {
+    height: 150px !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .panel-header-img {
+    height: 200px !important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .panel-header-img {
+    height: 175px !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .panel-header-img {
+    height: 300px !important;
+  }
+}

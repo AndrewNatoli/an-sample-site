@@ -1,0 +1,95 @@
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      GET /user/{user_id}/visits - Sample API
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-cmpd"></div>
+
+  <div class="panel-body">
+    <p>
+      Every year the CMPD Explorers Christmas Project collects and delivers toys and clothing to underprivileged
+      children throughout Charlotte. Since the project began four decades ago all nominations, deliveries,
+      and inventories were managed entirely by paper. In October 2015 I joined Code for Charlotte and led
+      development with a team of fellow volunteers to build a digital implementation of their record
+      keeping process that helped CMPD serve over 1,700 children in 2016.
+    </p>
+    <p>
+      We're currently in the process of converting the project from Laravel to Phalcon to better tackle
+      some new features for the 2017 version so here's an in-progress look at some considerations to the
+      core template:
+    </p>
+    <p>
+      <b>layouts/dashboard.volt</b>
+    </p>
+    <pre>
+<code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;title&gt;CMPD Explorers&lt;/title&gt;
+    &lt;meta content=&quot;width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no&quot; name=&quot;viewport&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/css/styles.min.css&quot;&gt;
+  &lt;/head&gt;
+  &lt;body class=&quot;hold-transition skin-blue layout-top-nav&quot;&gt;
+    &lt;div class=&quot;wrapper&quot;&gt;
+      {% include 'partials/header.volt' %}
+      &lt;div class=&quot;content-wrapper&quot;&gt;
+        &lt;div class=&quot;container&quot;&gt;
+          {% block content %}
+        &lt;/div&gt;
+      &lt;/div&gt;
+      {% include 'partials/footer.volt' %}
+    &lt;/div&gt;
+    &lt;script src=&quot;/js/scripts.js&quot;&gt;&lt;/script&gt;
+    {% block footer_scripts %}{% endblock %}
+  &lt;/body&gt;
+&lt;/html&gt;</code>
+    </pre>
+    <p>
+      "Volt" is Phalcon's templating engine. Similar to Blade in Laravel, it allows us to introduce inheritance to
+      templates through the use of "blocks." Here we started with a "content" block where action-specific views
+      will be displayed, and there's also a "footer_scripts" block for placing any action-specific javascript, extra
+      styles, etc.
+    </p>
+    <p>
+      We import a single stylesheet that's assembled using Grunt and LESS, and a single script file that contains
+      all necesarry Javascript.
+    </p>
+    <p>
+      The header and footer HTML is split into separate partials to keep everything sectioned and neat.
+    </p>
+
+    <p>
+      <b>
+        Excerpt from partials/header.volt
+      </b>
+    </p>
+    <pre>
+<code class="language-markup">&lt;div class=&quot;collapse navbar-collapse pull-left&quot; id=&quot;navbar-collapse&quot;&gt;
+  &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+    {{ navigation.renderNavigationItems() }}
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+    <p>
+      In Laravel we used Middleware to pragmatically generate a navigation menu for administrators.
+      That's done outside of the template engine but it makes it easy to highlight the active page and
+      filter options for different permission levels.
+    </p>
+    <p>
+      We're creating something similar here with Phalcon's "Plugins" format.
+    </p>
+    <p>
+      <code class="language-markup">{{ navigation.renderNavigationItems() }}</code> is our plugin that
+      produces HTML showing available actions and highlighting the active one.
+    </p>
+    <p>
+      You can view the full project on GitHub:
+      <a href="https://github.com/CodeForCharlotte/cmpd-winter-gift" target="_blank" rel="noreferrer nofollow">2017 Version (Phalcon)</a>
+      |
+      <a href="https://github.com/CodeForCharlotte/cmpd-holiday-gift-backend" target="_blank" rel="noreferrer nofollow">2016 Version (Laravel)</a>
+    </p>
+  </div>
+</div>

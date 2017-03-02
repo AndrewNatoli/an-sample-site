@@ -1,0 +1,95 @@
+<div class="panel panel-card">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      Charlotte Road Closures (VueJS Edition)
+    </h3>
+  </div>
+
+  <div class="panel-header-img panel-img-charlotte"></div>
+
+  <div class="panel-body">
+    I originally created a <a href="https://github.com/AndrewNatoli/clt-road-closures" target="_blank" rel="noreferrer nofollow">
+      road closures project
+    </a> to demonstrate using Charlotte's
+    <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiSuvacuLbSAhXHr1QKHexJAvIQFggcMAA&url=http%3A%2F%2Fclt-charlotte.opendata.arcgis.com%2F&usg=AFQjCNE2KtDlgZh_g7HT690qRFGJA8ceLA&sig2=zu_NY9pRWSJKidklEMJyDg"
+       target="_blank" rel="noreferrer nofollow">
+      open data portal
+    </a>
+    during a guest presentation I gave at Tech Talent South in 2016. I recently decided to do a VueJS
+    implementation to experiment with "Vueify" which lets you break out your Vue components into
+    individual files.
+
+    <pre>
+<code class="language-markup">&lt;template&gt;
+  &lt;div&gt;
+    &lt;button class="btn btn-primary btn-toggle" v-on:click="toggleShowExpired"&gt;
+      {{showExpiredLabel}}
+    &lt;/button&gt;
+    &lt;closure-card v-for="record in filteredRecords" :record="record"&gt;&lt;/closure-card&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  import ClosureCard from '../components/ClosureCard.vue';
+
+  export default {
+    name: 'closure-feed',
+    components: { ClosureCard },
+    data: function () {
+      return {
+        records: [],
+        showExpired: false
+      }
+    },
+    mounted: function () {
+      this.fetchFeed();
+    },
+    methods: {
+      toggleShowExpired: function () {
+        this.showExpired = !this.showExpired;
+      },
+      fetchFeed: function () {
+        var self = this;
+        Vue.http.get('./data/example.json')
+          .then(function (resp) {
+            self.$set(self, 'records', resp.body.features);
+          },
+          function (resp) {
+            console.log("Error here :(");
+          }
+        );
+      }
+    },
+    computed: {
+      filteredRecords: function () {
+        var now = Date.now();
+        var self = this;
+        return this.records.filter(function (record) {
+          if (!self.showExpired)
+          {
+            var end = new Date(record.properties.ENDDATE).getTime()
+            return (now &lt; end);
+          }
+          return true;
+        })
+      },
+      showExpiredLabel: function () {
+        return (this.showExpired) ? "Hide Expired Closures" : "Show Expired Closures";
+      }
+    }
+  }
+&lt;/script&gt;</code>
+    </pre>
+    <p>
+      This code is from the <b>ClosureFeed</b> Vue component. Its purpose is to fetch the data feed when loaded and render
+      the individual records with the ClosureCard component. It also controls filtering records where the "end date" has
+      already been passed.
+    </p>
+    <p>
+      You can view the full project source on
+      <a href="https://github.com/AndrewNatoli/clt-road-closures-vue" rel="noreferrer nofollow" target="_blank">
+        GitHub.
+      </a>
+    </p>
+  </div>
+</div>
